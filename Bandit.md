@@ -22,8 +22,7 @@ port : 2220
    level0의 계정에 접속한 뒤 `ls`를 통해 어떤 파일이 있는지 확인해본다.
    표시되는 `readme` 파일을 `cat`을 통해 읽어주면 비밀번호를 확인할 수 있다.
    ![bandit0](Bandit/bandit0.png)
-
-1. level 1 -> 2 <br/>
+2. level 1 -> 2 <br/>
    level1의 계정에 접속할 때는, 앞서 로그인한 level0에서 로그아웃 한 뒤 다시 ssh 로그인을 통해 다음 단계로 이동하면 된다.
    ![bandit1](Bandit/bandit1-1.png)
    이번에는 권한까지 표시될 수 있도록 `ls -alh`를 통해 파일 목록을 확인해보았다.<br/>
@@ -31,31 +30,56 @@ port : 2220
    `-`를 CLI가 파일 이름으로 인식하도록 하기 위해 `""`도 붙여 보았으나 같은 결과를 도출한다.<br/>
    그 까닭은 `-`는 일반적으로 명령어의 옵션이나 인자로 사용되기 때문이다. 이를 해결하기 위한 방법은 디렉토리부터 경로를 작성해주면 된다.
    ![bandit1 solved](Bandit/bandit1-2.png)
-
-1. level 2 -> 3 <br/>
+3. level 2 -> 3 <br/>
    level2의 계정에 접속해서 파일 목록을 확인해보면 다음과 같은 파일이 나온다.
    ![bandit2](Bandit/bandit2-1.png)
    level1에서와 마찬가지로 `-`로 시작하는 파일명이니 파일 경로를 작성해주거나, 앞에 `--`를 붙여주어야 한다.<br/>
    하지만 파일명에서 확인할 수 있듯, 해당 파일명에는 공백 문자가 포함되어있으므로 `""`로 묶어주어야 한다.
    ![bandit2 solved](Bandit/bandit2-2.png)
-
-1. level 3 -> 4
+4. level 3 -> 4 <br/>
    level3의 계정에 접속해보니 `inhere`이라는 디렉토리가 하나 나온다.
    해당 디렉토리로 이동해 `ls`를 사용해보면 아무 파일도 보이지 않는다.
    숨김파일까지 확인하기 위해 `-a` 옵션을 포함해 다시 확인해보면, 플래그가 담긴 숨김 파일을 확인할 수 있다.
    ![bandit3](Bandit/bandit3.png)
-
-1. level 4 -> 5
+5. level 4 -> 5 <br/>
    ![bandit4-1](Bandit/bandit4-1.png)
    이번 레벨에서는 -file00~09의 10개 파일을 발견했다.
    첫 번째 파일을 읽어보니 `사람이 읽을 수 없는` 형식의 내용이 등장하여 파일 유형을 확인해보니, `data` 유형이라고 한다.
    `OverTheWire`에서 이번 레벨의 Goal을 확인해보니,
-
 ```txt
 The password for the next level is stored in the only human-readable file in the inhere directory. Tip: if your terminal is messed up, try the “reset” command.
 ```
-
 다음 레벨의 비밀번호는 `human-readable` 파일에서 확인할 수 있다고 하니, 모든 파일의 유형을 확인해보았다.
 ![bandit4-2](Bandit/bandit4-2.png)
 `-file07`의 형식이 `ASCII text`로 사람이 읽을 수 있는 형식인 것을 확인했다. 해당 파일을 읽어보면 비밀번호를 확인할 수 있다.
 ![bandit4 solved](Bandit/bandit4-3.png)
+6. level 5 -> 6 <br/>
+   이전 레벨과 마찬가지로 `inhere` 디렉토리로 이동해보니, 이번에는 maybehere00~19의 20개 파일을 발견했다.<br/>
+   첫 번째 디렉토리에 들어가보니 다시 9개의 파일을 발견할 수 있었다.
+   ![bandit5](Bandit/bandit5-1.png)
+   문제 조건을 보니, 이번 레벨의 Goal은 `human-readable`, `1033 bytes in size`, `not executable`한 파일을 찾는 것이라고 한다.
+   사이즈 정보가 특정되었으니 해당 정보를 이용해 찾아보자.<br/>
+   다시 `inhere` 디렉토리로 돌아와서, `find` 명령어를 사용해 찾아준다.
+   파일 유형에서 `very long lines`를 포함하고 있다고 하여 확인해보니, 비밀번호 제외 전부 공백으로 채워져있었다.
+   ![bandit5 solved](Bandit/bandit5-2.png)
+7. level 6 -> 7 <br/>
+   이번 레벨에서는 접속해보니 위에서와 달리 `ls -alh`를 해보았을 때 유의미한 파일이 표시되지 않았다.
+   ![bandit6-1](Bandit/bandit6-1.png)
+   Level Goal을 확인해보니 다음과 같은 파일에 비밀번호가 담겨 있다고 한다.
+   - owned by user bandit7
+   - owned by group bandit6
+   - 33 bytes in size
+  
+   level5에서 사용했던 `find` 명령어에 옵션을 더 추가해 확인해보자.
+   ```bash
+   bandit6@bandit:~$ find / -user bandit7 -group bandit6 -size 33c
+   ```
+   와 같이 위의 조건들을 추가해 탐색을 해보았는데, 결과가 상당히 많이 나왔다.
+   거의 모든 결과가 `Permission denied`로 표시되었다.
+   가독성을 조금 더 향상시키기 위해 해당 에러문을 표시되지 않도록 해보자.
+   `Permission denied`는 표준 에러에 해당하는 오류 메시지이므로, 이를 `/dev/null`로 리다이렉션 해준다.
+   ![bandit6-2](Bandit/bandit6-2.png)
+   위와 같이 단 하나의 파일이 추려졌다.
+   해당 파일을 읽어보면 다음 레벨의 비밀번호를 확인할 수 있다.
+   ![bandit6 solved](Bandit/bandit6-3.png)
+
