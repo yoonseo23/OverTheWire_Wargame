@@ -12,7 +12,7 @@ port : 2220
 위 정보는 Bandit 페이지에서 좌측 상단에서 확인할 수 있다.
 각 단계에 접속하기 위해서는
 `ssh bandit<level>@bandit.labs.overthewire.org -p 2220`
-을 입력한 뒤, 각 단계의 플래그로 제시되는 비밀번호를 입력하면 다음 단계로 진입할 수 있다.
+을 입력한 뒤, 각 단계의 플래그로 제시되는 패스워드를 입력하면 다음 단계로 진입할 수 있다.
 
 ---
 
@@ -20,7 +20,7 @@ port : 2220
 
 1. level 0 -> 1 <br/>
    level0의 계정에 접속한 뒤 `ls`를 통해 어떤 파일이 있는지 확인해본다.
-   표시되는 `readme` 파일을 `cat`을 통해 읽어주면 비밀번호를 확인할 수 있다.
+   표시되는 `readme` 파일을 `cat`을 통해 읽어주면 패스워드를 확인할 수 있다.
    ![bandit0](Bandit/bandit0.png)
 2. level 1 -> 2 <br/>
    level1의 계정에 접속할 때는, 앞서 로그인한 level0에서 로그아웃 한 뒤 다시 ssh 로그인을 통해 다음 단계로 이동하면 된다.
@@ -49,9 +49,9 @@ port : 2220
 ```txt
 The password for the next level is stored in the only human-readable file in the inhere directory. Tip: if your terminal is messed up, try the “reset” command.
 ```
-다음 레벨의 비밀번호는 `human-readable` 파일에서 확인할 수 있다고 하니, 모든 파일의 유형을 확인해보았다.
+다음 레벨의 패스워드는 `human-readable` 파일에서 확인할 수 있다고 하니, 모든 파일의 유형을 확인해보았다.
 ![bandit4-2](Bandit/bandit4-2.png)
-`-file07`의 형식이 `ASCII text`로 사람이 읽을 수 있는 형식인 것을 확인했다. 해당 파일을 읽어보면 비밀번호를 확인할 수 있다.
+`-file07`의 형식이 `ASCII text`로 사람이 읽을 수 있는 형식인 것을 확인했다. 해당 파일을 읽어보면 패스워드를 확인할 수 있다.
 ![bandit4 solved](Bandit/bandit4-3.png)
 6. level 5 -> 6 <br/>
    이전 레벨과 마찬가지로 `inhere` 디렉토리로 이동해보니, 이번에는 maybehere00~19의 20개 파일을 발견했다.<br/>
@@ -60,12 +60,12 @@ The password for the next level is stored in the only human-readable file in the
    문제 조건을 보니, 이번 레벨의 Goal은 `human-readable`, `1033 bytes in size`, `not executable`한 파일을 찾는 것이라고 한다.
    사이즈 정보가 특정되었으니 해당 정보를 이용해 찾아보자.<br/>
    다시 `inhere` 디렉토리로 돌아와서, `find` 명령어를 사용해 찾아준다.
-   파일 유형에서 `very long lines`를 포함하고 있다고 하여 확인해보니, 비밀번호 제외 전부 공백으로 채워져있었다.
+   파일 유형에서 `very long lines`를 포함하고 있다고 하여 확인해보니, 패스워드 제외 전부 공백으로 채워져있었다.
    ![bandit5 solved](Bandit/bandit5-2.png)
 7. level 6 -> 7 <br/>
    이번 레벨에서는 접속해보니 위에서와 달리 `ls -alh`를 해보았을 때 유의미한 파일이 표시되지 않았다.
    ![bandit6-1](Bandit/bandit6-1.png)
-   Level Goal을 확인해보니 다음과 같은 파일에 비밀번호가 담겨 있다고 한다.
+   Level Goal을 확인해보니 다음과 같은 파일에 패스워드가 담겨 있다고 한다.
    - owned by user bandit7
    - owned by group bandit6
    - 33 bytes in size
@@ -80,6 +80,24 @@ The password for the next level is stored in the only human-readable file in the
    `Permission denied`는 표준 에러에 해당하는 오류 메시지이므로, 이를 `/dev/null`로 리다이렉션 해준다.
    ![bandit6-2](Bandit/bandit6-2.png)
    위와 같이 단 하나의 파일이 추려졌다.
-   해당 파일을 읽어보면 다음 레벨의 비밀번호를 확인할 수 있다.
+   해당 파일을 읽어보면 다음 레벨의 패스워드를 확인할 수 있다.
    ![bandit6 solved](Bandit/bandit6-3.png)
+8. level 7 -> 8 <br/>
+   이번 레벨에서는 접속 후 `data.txt` 파일을 발견하였다.
+   해당 파일을 `cat` 명령어를 통해 읽어보려 하였으나, 길이가 방대해 도중에 정지하였다. 파일의 내용은 영단어 옆에 패스워드 후보 문자열이 사전 형식으로 늘어져 있는 형태였다.
+   Level Goal을 확인해보니 `millionth` 라는 단어 옆에 패스워드가 있다고 한다. `grep`을 사용해 패스워드를 찾도록 하자.
+   ![bandit7](Bandit/bandit7.png)
+9. level 8 -> 9 <br/>
+   이번 레벨은 얼핏 보기에 level7과 달라진 게 없어보인다.
+   `data.txt`의 내용을 확인하기 위해 상위 10줄만 출력해보니 다음과 같았다.
+   ![bandit8-1](Bandit/bandit8-1.png)
+   Level Goal을 확인하니, `한 번만 등장하는 라인`에 존재한다고 한다.<br/>
+   패스워드를 찾기 위해서는 우선 중복되는 내용을 걸러내야 한다.
+   중복을 찾아내기 위해 `uniq` 명령어를 사용해보자. 이때, `uniq`는 연속된 중복만 카운트할 수 있으므로 오름차순 정렬 작업이 추가적으로 필요하다.<br/>
+   이를 위해 `sort` 명령어를 사용한다.<br/>
+   두 명령어를 연결해주어야 하는데, 정렬된 텍스트를 대상으로 중복 검사를 해야 중복 횟수를 정확하게 알 수 있으므로 `sort data.txt | uniq -c`와 같이 명령어를 완성해준다.
+   ![bandit8-2](Bandit/bandit8-2.png)
+   파일이 길어 보기가 조금 불편하니, 1번만 중복된, 즉 중복되지 않은 문자열을 `grep`으로 선별해 출력해보자.<br/>
+   이때 탐색 대상을 `1`로 설정하면 패스워드에 있는 모든 1과 중복횟수 10까지 모두 찾게 되니, `"1 "`로 띄어쓰기를 포함하여 탐색해보자.
+   ![bandit8 solved](Bandit/bandit8-3.png)
 
