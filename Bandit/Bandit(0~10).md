@@ -16,13 +16,14 @@ port : 2220
 
 ---
 
-## Level 0 ~ 10
+## Level 0 -> 1
 
-1. level 0 -> 1 <br/>
    level0의 계정에 접속한 뒤 `ls`를 통해 어떤 파일이 있는지 확인해본다.
    표시되는 `readme` 파일을 `cat`을 통해 읽어주면 패스워드를 확인할 수 있다.
    ![bandit0](./screenshots/bandit0.png)
-2. level 1 -> 2 <br/>
+
+## Level 1 -> 2
+
    level1의 계정에 접속할 때는, 앞서 로그인한 level0에서 로그아웃 한 뒤 다시 ssh 로그인을 통해 다음 단계로 이동하면 된다.
    ![bandit1](./screenshots/bandit1-1.png)
    이번에는 권한까지 표시될 수 있도록 `ls -alh`를 통해 파일 목록을 확인해보았다.<br/>
@@ -30,18 +31,24 @@ port : 2220
    `-`를 CLI가 파일 이름으로 인식하도록 하기 위해 `""`도 붙여 보았으나 같은 결과를 도출한다.<br/>
    그 까닭은 `-`는 일반적으로 명령어의 옵션이나 인자로 사용되기 때문이다. 이를 해결하기 위한 방법은 디렉토리부터 경로를 작성해주면 된다.
    ![bandit1 solved](./screenshots/bandit1-2.png)
-3. level 2 -> 3 <br/>
+
+## Level 2 -> 3
+
    level2의 계정에 접속해서 파일 목록을 확인해보면 다음과 같은 파일이 나온다.
    ![bandit2](./screenshots/bandit2-1.png)
    level1에서와 마찬가지로 `-`로 시작하는 파일명이니 파일 경로를 작성해주거나, 앞에 `--`를 붙여주어야 한다.<br/>
    하지만 파일명에서 확인할 수 있듯, 해당 파일명에는 공백 문자가 포함되어있으므로 `""`로 묶어주어야 한다.
    ![bandit2 solved](./screenshots/bandit2-2.png)
-4. level 3 -> 4 <br/>
+
+## Level 3 -> 4
+
    level3의 계정에 접속해보니 `inhere`이라는 디렉토리가 하나 나온다.
    해당 디렉토리로 이동해 `ls`를 사용해보면 아무 파일도 보이지 않는다.
    숨김파일까지 확인하기 위해 `-a` 옵션을 포함해 다시 확인해보면, 플래그가 담긴 숨김 파일을 확인할 수 있다.
    ![bandit3](./screenshots/bandit3.png)
-5. level 4 -> 5 <br/>
+
+## Level 4 -> 5
+
    ![bandit4-1](./screenshots/bandit4-1.png)
    이번 레벨에서는 -file00~09의 10개 파일을 발견했다.
    첫 번째 파일을 읽어보니 `사람이 읽을 수 없는` 형식의 내용이 등장하여 파일 유형을 확인해보니, `data` 유형이라고 한다.
@@ -53,7 +60,9 @@ The password for the next level is stored in the only human-readable file in the
 ![bandit4-2](./screenshots/bandit4-2.png)
 `-file07`의 형식이 `ASCII text`로 사람이 읽을 수 있는 형식인 것을 확인했다. 해당 파일을 읽어보면 패스워드를 확인할 수 있다.
 ![bandit4 solved](./screenshots/bandit4-3.png)
-6. level 5 -> 6 <br/>
+
+## Level 5 -> 6
+
    이전 레벨과 마찬가지로 `inhere` 디렉토리로 이동해보니, 이번에는 maybehere00~19의 20개 파일을 발견했다.<br/>
    첫 번째 디렉토리에 들어가보니 다시 9개의 파일을 발견할 수 있었다.
    ![bandit5](./screenshots/bandit5-1.png)
@@ -62,7 +71,9 @@ The password for the next level is stored in the only human-readable file in the
    다시 `inhere` 디렉토리로 돌아와서, `find` 명령어를 사용해 찾아준다.
    파일 유형에서 `very long lines`를 포함하고 있다고 하여 확인해보니, 패스워드 제외 전부 공백으로 채워져있었다.
    ![bandit5 solved](./screenshots/bandit5-2.png)
-7. level 6 -> 7 <br/>
+
+## Level 6 -> 7
+
    이번 레벨에서는 접속해보니 위에서와 달리 `ls -alh`를 해보았을 때 유의미한 파일이 표시되지 않았다.
    ![bandit6-1](./screenshots/bandit6-1.png)
    Level Goal을 확인해보니 다음과 같은 파일에 패스워드가 담겨 있다고 한다.
@@ -82,12 +93,16 @@ The password for the next level is stored in the only human-readable file in the
    위와 같이 단 하나의 파일이 추려졌다.
    해당 파일을 읽어보면 다음 레벨의 패스워드를 확인할 수 있다.
    ![bandit6 solved](./screenshots/bandit6-3.png)
-8. level 7 -> 8 <br/>
+
+## Level 7 -> 8
+
    이번 레벨에서는 접속 후 `data.txt` 파일을 발견하였다.
    해당 파일을 `cat` 명령어를 통해 읽어보려 하였으나, 길이가 방대해 도중에 정지하였다. 파일의 내용은 영단어 옆에 패스워드 후보 문자열이 사전 형식으로 늘어져 있는 형태였다.
    Level Goal을 확인해보니 `millionth` 라는 단어 옆에 패스워드가 있다고 한다. `grep`을 사용해 패스워드를 찾도록 하자.
    ![bandit7](./screenshots/bandit7.png)
-9. level 8 -> 9 <br/>
+
+## Level 8 -> 9
+
    이번 레벨은 얼핏 보기에 level7과 달라진 게 없어보인다.
    `data.txt`의 내용을 확인하기 위해 상위 10줄만 출력해보니 다음과 같았다.
    ![bandit8-1](./screenshots/bandit8-1.png)
@@ -100,7 +115,9 @@ The password for the next level is stored in the only human-readable file in the
    파일이 길어 보기가 조금 불편하니, 1번만 중복된, 즉 중복되지 않은 문자열을 `grep`으로 선별해 출력해보자.<br/>
    이때 탐색 대상을 `1`로 설정하면 패스워드에 있는 모든 1과 중복횟수 10까지 모두 찾게 되니, `"1 "`로 띄어쓰기를 포함하여 탐색해보자.
    ![bandit8 solved](./screenshots/bandit8-3.png)
-10. level 9 -> 10 <br/>   
+
+## Level 9 -> 10
+
    Level Goal
    ```txt
    The password for the next level is stored in the file data.txt in one of the few human-readable strings, preceded by several ‘=’ characters.
@@ -112,7 +129,9 @@ The password for the next level is stored in the only human-readable file in the
    ![bandit9-2](./screenshots/bandit9-2.png)
    따라서 바이너리 파일을 읽기 위해 `strings`를 사용해 텍스트를 우선적으로 찾아주었다. 물론 이 상태에서도 텍스트를 쭉 읽어보면 패스워드를 찾을 수 있겠지만, `grep`을 사용해 더 깔끔하게 정렬해보자.
    ![bandit9 solved](./screenshots/bandit9-3.png)
-11. level 10 -> 11
+
+## Level 10 -> 11
+
    이번 레벨의 목표는 `base64`로 인코딩된 패스워드를 얻어내면 된다.
    `cat`을 통해 `data.txt`를 읽어보니 길지 않은 길이의 인코딩된 텍스트가 출력되어, `base64 -d`를 통해 디코딩해주었다.
    ![bandit10 solved](./screenshots/bandit10.png)
